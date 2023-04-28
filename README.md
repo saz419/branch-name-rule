@@ -1,3 +1,2 @@
 # branch-name-rule
 
-d
