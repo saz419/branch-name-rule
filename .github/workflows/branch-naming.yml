@@ -1,0 +1,25 @@
+name: Enforce Branch Naming
+
+on:
+  push:
+    branches-ignore:
+      - main
+  pull_request:
+    branches-ignore:
+      - main
+
+jobs:
+  check-branch-name:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check branch name
+        run: |
+          branch_name="${{ github.head_ref }}"
+          pattern="^(feature|hotfix)\/[a-z0-9]+-[0-9]+-[a-z0-9-]+(-[a-z0-9-]+)*$"
+          
+          if ! [[ "${branch_name}" =~ ${pattern} ]]; then
+            echo "error: Invalid branch name [${branch_name}]. Branch name should be in the format of 'feature/{board-name}-{ticket-number}-{ticket-name}' or 'hotfix/{board-name}-{ticket-number}-{ticket-name}'"
+            exit 1
+          fi
+
